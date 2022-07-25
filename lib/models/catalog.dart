@@ -1,9 +1,7 @@
-// ignore_for_file: unused_import
-
 import 'package:flutter/material.dart';
 
-class CatalogModel {
-  static List<Item> items = [
+class CatalogModels {
+  static List<Item> item = [
     Item(
         id: 1,
         name: "iPhone 12 Pro",

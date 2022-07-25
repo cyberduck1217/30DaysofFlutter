@@ -1,6 +1,4 @@
-// ignore_for_file: prefer_const_constructors, unused_local_variable, avoid_print, unused_import, duplicate_import
-
-import 'dart:convert';
+// ignore_for_file: prefer_const_constructors, unused_local_variable, avoid_print, unused_import, duplicate_import, non_constant_identifier_names
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -29,14 +27,15 @@ class _HomepageState extends State<Homepage> {
   }
 
   loadData() async {
+    await Future.delayed(Duration(seconds: 2));
     final catalogJson =
         await rootBundle.loadString("assets/files/catalog.json");
     final decodedData = jsonDecode(catalogJson);
     var productsData = decodedData["products"];
-    CatalogModel.items = List.from(productsData)
-        .map<Item>((item) => item.fromMap(item))
+    var item = decodedData(productsData);
+    CatalogModels.item = List.from(productsData)
+        .map<Item>((item) => Item.fromMap(item))
         .toList();
-    setState(() {});
   }
 
   @override
@@ -47,12 +46,29 @@ class _HomepageState extends State<Homepage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: ListView.builder(
-          itemCount: CatalogModel.items.length,
-          itemBuilder: ((context, index) {
-            return ItemWidget(item: CatalogModel.items[index]);
-          }),
-        ),
+        child: (CatalogModels.item.isNotEmpty)
+            ? GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisSpacing: 16,
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 16),
+                itemCount: CatalogModels.item.length,
+                itemBuilder: ((context, index) {
+                  final item = CatalogModels.item[index];
+                  return Card(
+                      clipBehavior: Clip.antiAlias,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                      child: GridTile(
+                        header: Text(item.name),
+                        footer: Text(item.price.toString()),
+                        child: Image.network(item.image),
+                      ));
+                }),
+              )
+            : Center(
+                child: CircularProgressIndicator(),
+              ),
       ),
       drawer: MyDrawer(),
     );

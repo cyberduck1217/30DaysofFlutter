@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:signin_example/screens/login_page.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:signin_example/utilities/routes.dart';
 import 'package:signin_example/widgets/themes.dart';
 
